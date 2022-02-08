@@ -1,6 +1,6 @@
 @echo off
 
-:: make sure to change the settings from line 4-9
+:: change setting asper your configurations such as db passwd and username 
 set dbUser=root
 set dbPassword="123456"
 set backupDir="C:\mybackup"
@@ -28,11 +28,15 @@ if %mm%==10 set Month="Oct"
 if %mm%==11 set Month="Nov"
 if %mm%==12 set Month="Dec"
 
-::set dirName=%dd%_%Month%_%yy%
+
+:: here i am setting dir name if you like to add dir inside parent dir 
+set dirName=%dd%_%Month%_%yy%
+
+::To set file format with date month and year 
 set fileSuffix=%dd%-%Month%-%yy%
 
-:: remove echo here if you like
-::echo "dirName"="%dirName%"
+:: if you like to create one directory inside the parent directory used echo 
+echo "dirName"="%dirName%"
 
 :: switch to the "data" folder
 pushd "%mysqlDataDir%"
@@ -41,19 +45,14 @@ pushd "%mysqlDataDir%"
 if not exist %backupDir%\%dirName%\   mkdir %backupDir%\%dirName%
 
 
+:: here i am using --database to backup one or more database using one single line command 
+:: you can change this asper your requirment 
 
-	%mysqldump% --host="localhost" --user=%dbUser% --password=%dbPassword% --single-transaction --add-drop-table --databases cipla_new cipla_customerdata_new cipla_trading_new > %backupDir%\%dirName%\cipla.sql
-	%zip% a -tgzip %backupDir%\%dirName%\%fileSuffix%_cipla.sql.gz %backupDir%\%dirName%\cipla.sql
-	del %backupDir%\%dirName%\cipla.sql 
+	%mysqldump% --host="localhost" --user=%dbUser% --password=%dbPassword% --single-transaction --add-drop-table --databases test1 test2 test3 > %backupDir%\%dirName%\test.sql
+	%zip% a -tgzip %backupDir%\%dirName%\%fileSuffix%_test.sql.gz %backupDir%\%dirName%\test.sql
+	del %backupDir%\%dirName%\test.sql 
   
         
-	%mysqldump% --host="localhost" --user=%dbUser% --password=%dbPassword% --single-transaction --add-drop-table --databases drreddy drreddy_customerdata drreddy_trading > %backupDir%\%dirName%\drreddy.sql
-	%zip% a -tgzip %backupDir%\%dirName%\%fileSuffix%_drreddy.sql.gz %backupDir%\%dirName%\drreddy.sql
-	del %backupDir%\%dirName%\drreddy.sql
 
-         
-	%mysqldump% --host="localhost" --user=%dbUser% --password=%dbPassword% --single-transaction --add-drop-table --databases sharechat sharechat_contractagreement sharechat_customerdata > %backupDir%\%dirName%\sharechat.sql
-	%zip% a -tgzip %backupDir%\%dirName%\%fileSuffix%_sharechat.sql.gz %backupDir%\%dirName%\sharechat.sql
-	del %backupDir%\%dirName%\sharechat.sql         
-            
+        
    
